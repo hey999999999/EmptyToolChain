@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: "emptytoolchain-service"
+spec:
+  # if your cluster supports it, uncomment the following to automatically create
+  # an external load-balanced IP for the frontend service.
+  #type: LoadBalancer
+  type: NodePort
+  ports:
+  # the port that this service should serve on
+  - name: http
+    port: 9080
+  - name: https
+    port: 9443
+
+  selector:
+    app: "emptytoolchain-selector"
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: "emptytoolchain-deployment"
+spec:
+  # this replicas value is default
+  # modify it according to your case
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: "emptytoolchain-selector"
+    spec:
+      containers:
+      - name: emptytoolchain
+        image: emptytoolchain:latest
+        readinessProbe:
+          httpGet:
+            path: /EmptyToolChain/health
+            port: 9080
+          initialDelaySeconds: 20
+        # resources:
+        #   requests:
+        #     cpu: 100m
+        #     memory: 100Mi
