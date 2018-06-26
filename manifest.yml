@@ -4,6 +4,6 @@ applications:
   timeout: 180
   name: EmptyToolChain
   buildpack: liberty-for-java
-  path: ./target/Greet-1.0-SNAPSHOT.zip
+  path: ./target/Greet.war
   memory: 512M
   random-route: true
